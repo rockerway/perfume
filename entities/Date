@@ -1,7 +1,0 @@
-package models
-
-type Date struct {
-	Date time.Date,
-	Week String,
-	time time.Time,
-}

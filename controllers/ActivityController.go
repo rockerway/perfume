@@ -12,7 +12,12 @@ type ActivityController struct {
 }
 
 // Index is the browse view
-func (controller ActivityController) Index(res http.ResponseWriter, req *http.Request) {
+func (controller *ActivityController) Index(res http.ResponseWriter, req *http.Request) {
 	_, err := io.WriteString(res, "activity")
 	recoder.Write(err)
+}
+
+// InitActivityController to initial activity controller
+func InitActivityController() *ActivityController {
+	return &ActivityController{Controller: InitController()}
 }

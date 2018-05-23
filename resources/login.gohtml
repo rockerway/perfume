@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Login - Perfume</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="resources/assets/css/main.css" />
+	</head>
+	<body>
+		<!-- Wrapper -->
+		<div id="wrapper">
+			{{template "Header"}}
+			{{template "Menu"}}
+			<!-- Main -->
+			<div id="main">
+				<div class="inner">
+					<h2>Login</h2>
+					<section>
+						<form method="post" action="/logincheck">
+							<div class="row uniform">
+								<div class="12u$">
+									<input type="email" name="input_email" id="email" value="" placeholder="Email" />
+								</div>
+                                <div class="12u$">
+									<input type="password" name="input_password" id="password" value="" placeholder="Password" />
+								</div>
+								<div class="12u$">
+									<ul class="actions">
+										<li><input type="submit" value="Login" class="special" /></li>
+										<li><input type="reset" value="Reset" /></li>
+									</ul>
+								</div>
+							</div>
+						</form>
+					</section>
+				</div>
+			</div>
+			{{template "Footer"}}
+		</div>
+
+		<script src="resources/assets/js/jquery.min.js"></script>
+		<script src="resources/assets/js/skel.min.js"></script>
+		<script src="resources/assets/js/util.js"></script>
+		<!--[if lte IE 8]><script src="resources/assets/js/ie/respond.min.js"></script><![endif]-->
+		<script src="resources/assets/js/main.js"></script>
+	</body>
+</html>

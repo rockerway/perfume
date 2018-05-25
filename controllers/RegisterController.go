@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 	"perfume/models"
+	"perfume/packages/auth"
 )
 
 // RegisterController handle register function
@@ -18,7 +19,7 @@ func (controller *RegisterController) Index(res http.ResponseWriter, req *http.R
 		http.Redirect(res, req, "/", http.StatusSeeOther)
 		return
 	}
-	controller.render(res, "register.gohtml", nil)
+	controller.render(res, req, "register.gohtml", nil)
 }
 
 // Register is the method that add new user
@@ -48,9 +49,9 @@ func (controller *RegisterController) isUserExist(email string) bool {
 }
 
 // InitRegisterController to init register controller
-func InitRegisterController() *RegisterController {
+func InitRegisterController(auth *auth.Authentication) *RegisterController {
 	return &RegisterController{
-		Controller: InitController(),
+		Controller: InitController(auth),
 		user:       models.InitUser(),
 	}
 }

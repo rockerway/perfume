@@ -3,6 +3,7 @@ package controllers
 import (
 	"io"
 	"net/http"
+	"perfume/packages/auth"
 	"perfume/packages/exception"
 )
 
@@ -18,6 +19,8 @@ func (controller *ActivityController) Index(res http.ResponseWriter, req *http.R
 }
 
 // InitActivityController to initial activity controller
-func InitActivityController() *ActivityController {
-	return &ActivityController{Controller: InitController()}
+func InitActivityController(auth *auth.Authentication) *ActivityController {
+	return &ActivityController{
+		Controller: InitController(auth),
+	}
 }

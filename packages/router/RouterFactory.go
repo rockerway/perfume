@@ -2,7 +2,9 @@ package router
 
 import (
 	"net/http"
+	"perfume/config"
 	"perfume/packages/exception"
+	"reflect"
 )
 
 var router = make(map[string]func(http.ResponseWriter, *http.Request))
@@ -19,7 +21,21 @@ func Start() {
 	recoder.Write(err)
 }
 
-// Register is the method to define route rule.
-func Register(path string, method func(res http.ResponseWriter, req *http.Request)) {
+// RegisterByHandleFunc is the method to define route rule by HandleFunc
+func RegisterByHandleFunc(path string, method func(res http.ResponseWriter, req *http.Request)) {
 	router[path] = method
+}
+
+// RegisterByString is the method to define route rule by controller name and method name
+func RegisterByString(path, controllerName, methodName string) {
+	class := config.ClassMap[controllerName]
+	controllerType := reflect.TypeOf(*class)
+	controllerValue := reflect.ValueOf(*class)
+	_, state := controllerType.MethodByName(methodName)
+	if state {
+		method := controllerValue.MethodByName(methodName)
+		RegisterByHandleFunc(path, func(res http.ResponseWriter, req *http.Request) {
+			method.Call([]reflect.Value{reflect.ValueOf(res), reflect.ValueOf(req)})
+		})
+	}
 }

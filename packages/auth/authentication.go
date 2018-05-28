@@ -12,7 +12,8 @@ const sessionExistTime int = 150
 
 var sessionsCleaned time.Time = time.Now()
 
-type user struct {
+type User struct {
+	ID        int
 	FirstName string
 	LastName  string
 }
@@ -24,7 +25,7 @@ type session struct {
 
 // Authentication struct
 type Authentication struct {
-	loginUser   map[string]user
+	loginUser   map[string]User
 	userSession map[string]session
 }
 
@@ -45,13 +46,26 @@ func (authentication *Authentication) IsLogin(res http.ResponseWriter, req *http
 	return userState
 }
 
+func (authentication *Authentication) GetUserData(res http.ResponseWriter, req *http.Request) User {
+	sessionID, sessionIDState := cookies.GetCookie(req, "session")
+	if !sessionIDState {
+		return User{ID: -1}
+	}
+	session, _ := authentication.userSession[sessionID.Value]
+	user, userState := authentication.loginUser[session.email]
+	if !userState {
+		return User{ID: -1}
+	}
+	return user
+}
+
 // Check is the method that login check
 func (authentication *Authentication) Check(hashedPassword, password string) bool {
 	return PasswordCheck(hashedPassword, password)
 }
 
 // CreateSession is the method that create session to keep user login
-func (authentication *Authentication) CreateSession(firstName, lastName, email string, res http.ResponseWriter) {
+func (authentication *Authentication) CreateSession(id int, firstName, lastName, email string, res http.ResponseWriter) {
 	sessionID, _ := uuid.NewV4()
 	cookie := &http.Cookie{
 		Name:  "session",
@@ -60,7 +74,7 @@ func (authentication *Authentication) CreateSession(firstName, lastName, email s
 	cookie.MaxAge = sessionExistTime
 	http.SetCookie(res, cookie)
 	authentication.userSession[cookie.Value] = session{email, time.Now()}
-	authentication.loginUser[email] = user{firstName, lastName}
+	authentication.loginUser[email] = User{id, firstName, lastName}
 }
 
 // ClearSession is the method that clear timeout session
@@ -92,7 +106,7 @@ func (authentication *Authentication) ClearSession(res http.ResponseWriter, req 
 // InitAuthentication to initial authentication struct
 func InitAuthentication() *Authentication {
 	return &Authentication{
-		map[string]user{},
+		map[string]User{},
 		map[string]session{},
 	}
 }

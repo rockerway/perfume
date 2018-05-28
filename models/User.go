@@ -20,16 +20,17 @@ func (user *User) GetUsers() *sql.Rows {
 }
 
 //GetUserByEmail is the method that get a user by email
-func (user *User) GetUserByEmail(email string) (string, string, string) {
+func (user *User) GetUserByEmail(email string) (int, string, string, string) {
 	user.Model.Init()
 	defer user.Model.Close()
+	var id int
 	var firstName, lastName, hashedPassword string
-	rows := user.Model.Query("select first_name, last_name, password from users where email='" + email + "';")
+	rows := user.Model.Query("select id, first_name, last_name, password from users where email='" + email + "';")
 	for rows.Next() {
-		err := rows.Scan(&firstName, &lastName, &hashedPassword)
+		err := rows.Scan(&id, &firstName, &lastName, &hashedPassword)
 		recoder.Write(err)
 	}
-	return firstName, lastName, hashedPassword
+	return id, firstName, lastName, hashedPassword
 }
 
 // AddUser is the method that add user

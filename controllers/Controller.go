@@ -8,7 +8,7 @@ import (
 
 // ControllerInterface to define router sub element
 type ControllerInterface interface {
-	render(res http.ResponseWriter, req *http.Request, view string, data interface{})
+	render(res http.ResponseWriter, req *http.Request, view string, data interface{}, urlLay int)
 	Index(res http.ResponseWriter, req *http.Request)
 	Show(res http.ResponseWriter, req *http.Request)
 	Create(res http.ResponseWriter, req *http.Request)
@@ -20,15 +20,16 @@ type Controller struct {
 	auth *auth.Authentication
 }
 
-func (controller *Controller) render(res http.ResponseWriter, req *http.Request, view string, data interface{}) {
+func (controller *Controller) render(res http.ResponseWriter, req *http.Request, view string, data interface{}, urlLay int) {
 	var tpl *template.Template = template.Must(template.ParseGlob("resources/*.gohtml"))
 	templateData := struct {
 		IsLogin bool
 		Data    interface{}
+		URLLay  int
 	}{
-		// controller.loginStatusToView(res, req),
 		controller.auth.IsLogin(res, req),
 		data,
+		urlLay,
 	}
 	tpl.ExecuteTemplate(res, view, templateData)
 }
@@ -47,13 +48,6 @@ func (controller *Controller) Create(res http.ResponseWriter, req *http.Request)
 
 func (controller *Controller) Delete(res http.ResponseWriter, req *http.Request) {
 	http.Error(res, "Method Not Allowed", 405)
-}
-
-func (controller *Controller) loginStatusToView(res http.ResponseWriter, req *http.Request) int {
-	if controller.auth.IsLogin(res, req) {
-		return 1
-	}
-	return 0
 }
 
 // InitController to initial controller

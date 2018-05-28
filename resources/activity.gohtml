@@ -9,28 +9,52 @@
 	<body>
 		<!-- Wrapper -->
 		<div id="wrapper">
-			{{template "Header"}}
+			{{template "Header" .URLLay}}
 			{{template "Menu" .IsLogin}}
 			<!-- Main -->
 			<div id="main">
 				<div class="inner">
 					<section>
 						<h2>Activity</h2>
+						{{if .IsLogin}}
+						<div class="row">
+							<div class="6u 12u$(medium)">
+								<ul class="actions">
+									<li><a href="/activity/create" class="button small">Create</a></li>
+								</ul>
+							</div>
+						</div>
+						{{end}}
 						<div class="table-wrapper">
 							<table class="alt">
 								<thead>
 									<tr>
 										<th>Name</th>
 										<th>Description</th>
+										<th>Creator</th>
 										<th></th>
 									</tr>
 								</thead>
 								<tbody>
+									{{range .Data}}
 									<tr>
-										<td>Item Five</td>
-										<td>Ante turpis integer aliquet porttitor.</td>
-										<td></td>
+										<td>{{.Name}}</td>
+										<td>{{.Description}}</td>
+										<td>{{.UserName}}</td>
+										<td>
+											<ul class="actions">
+												{{if .IsCreator}}
+												<form action="/activity/delete" method="post">
+													<li>
+														<input type="hidden" name="hidden_activity_id" value="{{.ID}}"/>
+														<input type="submit" class="button small fit delete_button" value="Delete"/>
+													</li>
+												</form>
+											{{end}}
+											</ul>
+										</td>
 									</tr>
+									{{end}}
 								</tbody>
 							</table>
 						</div>
@@ -40,10 +64,10 @@
 			{{template "Footer"}}
 		</div>
 
-		<script src="resources/assets/js/jquery.min.js"></script>
-		<script src="resources/assets/js/skel.min.js"></script>
-		<script src="resources/assets/js/util.js"></script>
-		<!--[if lte IE 8]><script src="resources/assets/js/ie/respond.min.js"></script><![endif]-->
-		<script src="resources/assets/js/main.js"></script>
+		<script src="/resources/assets/js/jquery.min.js"></script>
+		<script src="/resources/assets/js/skel.min.js"></script>
+		<script src="/resources/assets/js/util.js"></script>
+		<!--[if lte IE 8]><script src="/resources/assets/js/ie/respond.min.js"></script><![endif]-->
+		<script src="/resources/assets/js/main.js"></script>
 	</body>
 </html>

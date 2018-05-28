@@ -1,1 +1,2 @@
-create table users (id int(11) NOT NULL auto_increment, first_name char(35) NOT NULL default '', last_name char(50) NOT NULL default '', email char(255) UNIQUE Not NULL default '', password char(255) NOT NULL default '', PRIMARY KEY (id)) CHARSET=utf8 COLLATE=utf8_unicode_ci;
+create table users (id int(11) NOT NULL auto_increment, first_name char(35) NOT NULL default '', last_name char(50) NOT NULL default '', email char(255) UNIQUE Not NULL, password char(255) NOT NULL, PRIMARY KEY (id)) CHARSET=utf8 COLLATE=utf8_unicode_ci;
+create table activities (id int(11) NOT NULL auto_increment, name char(50) NOT NULL default '', description char(255) default '', PRIMARY KEY (id)) CHARSET=utf8 COLLATE=utf8_unicode_ci;

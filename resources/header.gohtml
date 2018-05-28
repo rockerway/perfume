@@ -4,7 +4,15 @@
     <div class="inner">
         <!-- Logo -->
         <a href="/" class="logo">
-            <span class="symbol"><img src="resources/images/logo.svg" alt="" /></span><span class="title">Perfume</span>
+            <span class="symbol"><img src=
+                {{if eq . 1}}
+                "resources/images/logo.svg"
+                {{else}}
+                "../resources/images/logo.svg"
+                {{end}}
+                alt="" />
+            </span>
+            <span class="title">Perfume</span>
         </a>
         <!-- Nav -->
         <nav>

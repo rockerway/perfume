@@ -19,7 +19,7 @@ func (controller *RegisterController) Index(res http.ResponseWriter, req *http.R
 		http.Redirect(res, req, "/", http.StatusSeeOther)
 		return
 	}
-	controller.render(res, req, "register.gohtml", nil)
+	controller.render(res, req, "register.gohtml", nil, 1)
 }
 
 // Register is the method that add new user
@@ -41,8 +41,8 @@ func (controller *RegisterController) Register(res http.ResponseWriter, req *htt
 }
 
 func (controller *RegisterController) isUserExist(email string) bool {
-	firstName, lastName, password := controller.user.GetUserByEmail(email)
-	if firstName == "" && lastName == "" && password == "" {
+	id, firstName, lastName, password := controller.user.GetUserByEmail(email)
+	if id == 0 && firstName == "" && lastName == "" && password == "" {
 		return false
 	}
 	return true

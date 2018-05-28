@@ -18,7 +18,7 @@ func (controller *LoginController) Index(res http.ResponseWriter, req *http.Requ
 		http.Redirect(res, req, "/", http.StatusSeeOther)
 		return
 	}
-	controller.render(res, req, "login.gohtml", nil)
+	controller.render(res, req, "login.gohtml", nil, 1)
 }
 
 // LoginCheck is the method that auth accoute
@@ -30,9 +30,9 @@ func (controller *LoginController) LoginCheck(res http.ResponseWriter, req *http
 		}
 		email := req.FormValue("input_email")
 		password := req.FormValue("input_password")
-		firstName, lastName, hashedPassword := controller.user.GetUserByEmail(email)
+		id, firstName, lastName, hashedPassword := controller.user.GetUserByEmail(email)
 		if controller.auth.Check(hashedPassword, password) {
-			controller.auth.CreateSession(firstName, lastName, email, res)
+			controller.auth.CreateSession(id, firstName, lastName, email, res)
 			http.Redirect(res, req, "/", http.StatusSeeOther)
 		} else {
 			http.Error(res, "Username and/or password do not match", http.StatusForbidden)

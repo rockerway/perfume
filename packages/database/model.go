@@ -10,7 +10,7 @@ import (
 const dbUsername string = "root"
 const dbPassword string = "password"
 const dbName string = "go"
-const dbHost string = "172.18.0.2"
+const dbHost string = "172.19.0.2"
 
 // Model struct
 type Model struct {
@@ -31,6 +31,20 @@ func (model *Model) Query(statement string) *sql.Rows {
 	rows, err := model.db.Query(statement)
 	recoder.Write(err)
 	return rows
+}
+
+// Exec is the method that insert statement
+func (model *Model) Exec(statement string) int64 {
+	var id int64
+	result, err := model.db.Exec(statement)
+	if recoder.Write(err) {
+		var getIDError error
+		id, getIDError = result.LastInsertId()
+		if recoder.Write(getIDError) {
+
+		}
+	}
+	return id
 }
 
 // InitModel to init model

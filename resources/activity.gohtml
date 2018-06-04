@@ -32,7 +32,9 @@
 										<th>Name</th>
 										<th>Description</th>
 										<th>Creator</th>
+										{{if .IsLogin}}
 										<th></th>
+										{{end}}
 									</tr>
 								</thead>
 								<tbody>
@@ -41,18 +43,32 @@
 										<td>{{.Name}}</td>
 										<td>{{.Description}}</td>
 										<td>{{.UserName}}</td>
+										{{if .IsLogin}}
 										<td>
 											<ul class="actions">
 												{{if .IsCreator}}
 												<form action="/activity/delete" method="post">
 													<li>
 														<input type="hidden" name="hidden_activity_id" value="{{.ID}}"/>
-														<input type="submit" class="button small fit delete_button" value="Delete"/>
+														<input type="submit" class="button small special fit delete_button" value="Delete"/>
 													</li>
 												</form>
-											{{end}}
+												{{else}}
+												<form action="/activity/join" method="post">
+													<li>
+														<input type="hidden" name="hidden_activity_id" value="{{.ID}}"/>
+														<input type="hidden" name="hidden_join_status" value="{{.IsParticipant}}"/>
+														{{if .IsParticipant}}
+														<input type="submit" class="button small fit special delete_button" value="下車"/>
+														{{else}}
+														<input type="submit" class="button small fit delete_button" value="上車"/>
+														{{end}}
+													</li>
+												</form>
+												{{end}}
 											</ul>
 										</td>
+										{{end}}
 									</tr>
 									{{end}}
 								</tbody>

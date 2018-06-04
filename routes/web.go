@@ -23,5 +23,6 @@ func Open() {
 	router.RegisterByString("/activity/create", "ActivityController", "Create")
 	router.RegisterByString("/activity/store", "ActivityController", "Store")
 	router.RegisterByString("/activity/delete", "ActivityController", "Delete")
+	router.RegisterByString("/activity/join", "ActivityController", "Join")
 	router.Start()
 }

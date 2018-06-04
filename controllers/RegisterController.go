@@ -34,7 +34,13 @@ func (controller *RegisterController) Register(res http.ResponseWriter, req *htt
 			return
 		}
 		controller.user.AddUser(firstName, lastName, email, password)
-		http.Redirect(res, req, "/", http.StatusSeeOther)
+		id, _, _, hashedPassword := controller.user.GetUserByEmail(email)
+		if controller.auth.Check(hashedPassword, password) {
+			controller.auth.CreateSession(id, firstName, lastName, email, res)
+			http.Redirect(res, req, "/", http.StatusSeeOther)
+			return
+		}
+		http.Redirect(res, req, "/login", http.StatusSeeOther)
 		return
 	}
 	http.Error(res, "No page. Did U understand???", http.StatusNotFound)

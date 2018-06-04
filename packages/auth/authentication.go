@@ -8,7 +8,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-const sessionExistTime int = 150
+const sessionExistTime int = 300
 
 var sessionsCleaned time.Time = time.Now()
 
@@ -41,6 +41,7 @@ func (authentication *Authentication) IsLogin(res http.ResponseWriter, req *http
 		authentication.userSession[sessionID.Value] = session
 	}
 	_, userState := authentication.loginUser[session.email]
+	sessionID.Path = "/"
 	sessionID.MaxAge = sessionExistTime
 	http.SetCookie(res, sessionID)
 	return userState
@@ -70,6 +71,7 @@ func (authentication *Authentication) CreateSession(id int, firstName, lastName,
 	cookie := &http.Cookie{
 		Name:  "session",
 		Value: sessionID.String(),
+		Path:  "/",
 	}
 	cookie.MaxAge = sessionExistTime
 	http.SetCookie(res, cookie)
@@ -87,6 +89,7 @@ func (authentication *Authentication) ClearSession(res http.ResponseWriter, req 
 	cookie = &http.Cookie{
 		Name:   "session",
 		Value:  "",
+		Path:   "/",
 		MaxAge: -1,
 	}
 	http.SetCookie(res, cookie)
